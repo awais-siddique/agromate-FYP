@@ -17,12 +17,13 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
 
   Future<void> _resetPassword() async {
     if (_formKey.currentState!.validate()) {
+      if(!mounted) return;
       setState(() => isLoading = true);
 
       try {
         await FirebaseAuth.instance
             .sendPasswordResetEmail(email: emailController.text.trim());
-
+if(!mounted) return;
         setState(() => isLoading = false);
 
         ScaffoldMessenger.of(context).showSnackBar(
@@ -32,6 +33,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
           ),
         );
       } on FirebaseAuthException catch (e) {
+        if(!mounted) return;
         setState(() => isLoading = false);
 
         String errorMessage;

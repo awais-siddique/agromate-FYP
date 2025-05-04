@@ -24,6 +24,7 @@ class _LoginScreenState extends State<LoginScreen> {
 
   void handleLogin() {
     if (eController.text.isNotEmpty && pController.text.isNotEmpty) {
+      if(!mounted) return;
       setState(() => loading = true);
 
       // Call login function

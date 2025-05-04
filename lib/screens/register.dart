@@ -26,6 +26,7 @@ class _CreateAccountPageState extends State<CreateAccountPage> {
 
   void handleCreateAccount() {
     if (emailController.text.isNotEmpty && passwordController.text.isNotEmpty) {
+      if(!mounted) return;
       setState(() => isLoading = true);
 
       service.createUser(

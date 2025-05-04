@@ -37,9 +37,11 @@ class _DashboardScreenState extends State<DashboardScreen> {
       bottomNavigationBar: BottomNavigationBar(
         currentIndex: _currentIndex,
         onTap: (index) {
+          if(!mounted) return;
           setState(() {
             _currentIndex = index;
           });
+        
         },
         items: const [
           BottomNavigationBarItem(
@@ -118,6 +120,7 @@ class _DashboardContentState extends State<DashboardContent> {
          int wetMin = 1126;     // Min value when soil is fully wet
          final int clampedValue = value.clamp(wetMin, dryMax);
         final double percentage = ((dryMax - clampedValue) / (dryMax - wetMin)) * 100;
+        if(!mounted) return;
         setState(() {
           moistureValue = value;
            moistureProgress = percentage / 100;

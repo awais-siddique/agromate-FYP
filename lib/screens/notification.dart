@@ -1,44 +1,63 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:agromate/screens/notificationservice.dart';
 
 class NotificationsScreen extends StatelessWidget {
   const NotificationsScreen({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    // Example data for notifications
-    final notifications = [
-      {
-        "icon": Icons.water_drop,
-        "message": "Moisture declined by 20%",
-        "date": "26-12-24",
-        "time": "11:00",
-        "checked": true,
-      },
-      {
-        "icon": Icons.water_drop,
-        "message": "Moisture declined by 20%",
-        "date": "26-12-24",
-        "time": "11:00",
-        "checked": true,
-      },
-    ];
+    return Consumer<NotificationService>(
+      builder: (context, notifier, child) {
+        final notifications = notifier.notifications;
 
-    return Scaffold(
-      // Remove the AppBar here; it will inherit the parent navigation bar if used correctly
-      body: ListView.builder(
-        padding: const EdgeInsets.all(16.0),
-        itemCount: notifications.length,
-        itemBuilder: (context, index) {
-          final notification = notifications[index];
-          return NotificationTile(
-            icon: notification["icon"] as IconData,
-            message: notification["message"] as String,
-            date: notification["date"] as String,
-            time: notification["time"] as String,
-            checked: notification["checked"] as bool,
-          );
-        },
+        return Scaffold(
+         
+          body: notifications.isEmpty
+              ? const Center(child: Text("No notifications yet."))
+              : ListView.builder(
+                  padding: const EdgeInsets.all(16.0),
+                  itemCount: notifications.length,
+                  itemBuilder: (context, index) {
+                    final n = notifications[index];
+                    return NotificationTile(
+                      icon: n["icon"],
+                      message: n["message"],
+                      date: n["date"],
+                      time: n["time"],
+                      checked: n["checked"],
+                      onChanged: (value) async {
+  if (value == true) {
+    final confirmed = await showDialog<bool>(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: const Text("Delete Notification"),
+        content: const Text("Are you sure you want to delete this notification?"),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.of(context).pop(false),
+            child: const Text("Cancel"),
+          ),
+          ElevatedButton(
+            onPressed: () => Navigator.of(context).pop(true),
+            style: ElevatedButton.styleFrom(backgroundColor: Colors.red),
+            child: const Text("Delete"),
+          ),
+        ],
       ),
+    );
+
+    if (confirmed == true) {
+      notifier.deleteNotification(index);
+    }
+  }
+},
+
+                    );
+                  },
+                ),
+        );
+      },
     );
   }
 }
@@ -49,6 +68,7 @@ class NotificationTile extends StatelessWidget {
   final String date;
   final String time;
   final bool checked;
+  final ValueChanged<bool?> onChanged;
 
   const NotificationTile({
     Key? key,
@@ -57,6 +77,7 @@ class NotificationTile extends StatelessWidget {
     required this.date,
     required this.time,
     required this.checked,
+    required this.onChanged,
   }) : super(key: key);
 
   @override
@@ -66,59 +87,34 @@ class NotificationTile extends StatelessWidget {
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          // Icon
           CircleAvatar(
-            backgroundColor: Colors.blue.shade100,
-            child: Icon(
-              icon,
-              color: Colors.blue,
-            ),
+            backgroundColor: Colors.green.shade100,
+            child: Icon(icon, color: Colors.green),
           ),
           const SizedBox(width: 12),
-
-          // Message and Date-Time
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
                   message,
-                  style: const TextStyle(
-                    fontSize: 14,
-                    fontWeight: FontWeight.bold,
-                  ),
+                  style: const TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
                 ),
                 const SizedBox(height: 4),
                 Row(
                   children: [
-                    Text(
-                      date,
-                      style: const TextStyle(
-                        fontSize: 12,
-                        color: Colors.grey,
-                      ),
-                    ),
+                    Text(date, style: const TextStyle(fontSize: 12, color: Colors.grey)),
                     const SizedBox(width: 10),
-                    Text(
-                      time,
-                      style: const TextStyle(
-                        fontSize: 12,
-                        color: Colors.grey,
-                      ),
-                    ),
+                    Text(time, style: const TextStyle(fontSize: 12, color: Colors.grey)),
                   ],
                 ),
               ],
             ),
           ),
-
-          // Checkbox
           Checkbox(
             value: checked,
-            activeColor: Colors.purple,
-            onChanged: (value) {
-              // Handle checkbox state change if needed
-            },
+            activeColor: Colors.green,
+            onChanged: onChanged,
           ),
         ],
       ),

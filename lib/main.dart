@@ -1,9 +1,11 @@
 import 'package:agromate/screens/dashboard.dart';
 import 'package:agromate/screens/forgotpassword.dart';
+import 'package:agromate/screens/notificationservice.dart';
 import 'package:agromate/screens/register.dart';
 import 'package:agromate/screens/theme_provider.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:overlay_support/overlay_support.dart';
 import 'package:provider/provider.dart';
 import 'screens/login.dart';
 import 'screens/splashscreen.dart';
@@ -18,10 +20,17 @@ void main() async{
         projectId: "agromate-5604d",
       )
   );
-  runApp(ChangeNotifierProvider(
-      create: (context) => ThemeProvider(),
+  runApp(
+    
+       MultiProvider(
+      providers: [
+        ChangeNotifierProvider(create: (_) => ThemeProvider()),
+        ChangeNotifierProvider(create: (_) => NotificationService()),
+      ],
+
       child: const MyApp(),)
-      );
+    );
+      
 
 }
 
@@ -31,24 +40,26 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final themeProvider = Provider.of<ThemeProvider>(context);
-    return MaterialApp(
-      themeMode: themeProvider.themeMode,
-      theme: ThemeData.light(),
-      darkTheme: ThemeData.dark(),
-      debugShowCheckedModeBanner: false,
-      title: 'Agro Mate',
-      // theme: ThemeData(
-      //   primarySwatch: Colors.green,
-      // ),
-      // Initial route set to SplashScreen
-      initialRoute: '/',
-      routes: {
-        '/': (context) => const SplashScreen(),
-        '/login': (context) =>  LoginScreen(),
-        '/forgot-password': (context) => const ForgotPasswordScreen(),
-        '/register':(context)=> const CreateAccountPage(),
-        '/dashboard':(context)=> const DashboardScreen(),
-      },
+    return OverlaySupport.global(
+      child: MaterialApp(
+        themeMode: themeProvider.themeMode,
+        theme: ThemeData.light(),
+        darkTheme: ThemeData.dark(),
+        debugShowCheckedModeBanner: false,
+        title: 'Agro Mate',
+        // theme: ThemeData(
+        //   primarySwatch: Colors.green,
+        // ),
+        // Initial route set to SplashScreen
+        initialRoute: '/',
+        routes: {
+          '/': (context) => const SplashScreen(),
+          '/login': (context) =>  LoginScreen(),
+          '/forgot-password': (context) => const ForgotPasswordScreen(),
+          '/register':(context)=> const CreateAccountPage(),
+          '/dashboard':(context)=> const DashboardScreen(),
+        },
+      ),
     );
   }
 }

@@ -3,6 +3,8 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
+import 'package:overlay_support/overlay_support.dart';
+import 'package:agromate/screens/notificationservice.dart'; // Make sure this exists
 
 class MoistureStatus extends StatefulWidget {
   @override
@@ -15,6 +17,8 @@ class _MoistureStatusState extends State<MoistureStatus> {
   String? moistureStatus;
   String? weatherCondition;
   String? recommendation;
+
+  String? _previousStatus;
 
   final String apiKey = '15fd111ed24cfa866995f2cfa44d33fc';
   final String city = 'Rawalpindi';
@@ -29,10 +33,32 @@ class _MoistureStatusState extends State<MoistureStatus> {
     dbRef.onValue.listen((event) async {
       final data = event.snapshot.value as Map?;
       if (data != null) {
+        final newStatus = data['status']?.toString();
+        final newValue = data['value'];
+
+        // Check for status change
+        if (_previousStatus != null && _previousStatus != newStatus) {
+          String message = "Soil status changed to $newStatus";
+
+          // Show top-up notification
+          showSimpleNotification(
+            Text(message),
+            background: Colors.green,
+            duration: const Duration(seconds: 3),
+          );
+
+          // Save to notification service
+          NotificationService().addNotification(message);
+        }
+
+        // Save current status for next comparison
+        _previousStatus = newStatus;
+if(!mounted) return;
         setState(() {
-          moistureValue = data['value'];
-          moistureStatus = data['status'];
+          moistureValue = newValue;
+          moistureStatus = newStatus;
         });
+
         await fetchWeatherAndRecommend();
       }
     });
@@ -48,7 +74,7 @@ class _MoistureStatusState extends State<MoistureStatus> {
 
       final hasRain = (data['weather'] as List)
           .any((w) => w['main'].toString().toLowerCase().contains('rain'));
-
+if(!mounted) return;
       setState(() {
         weatherCondition = hasRain ? 'Rain expected' : 'No rain';
         recommendation = generateRecommendation(moistureStatus, hasRain);
@@ -72,7 +98,8 @@ class _MoistureStatusState extends State<MoistureStatus> {
       appBar: AppBar(
         title: Text('Soil Moisture Advisor'),
         centerTitle: true,
-        backgroundColor: Colors.green,),
+        backgroundColor: Colors.green,
+      ),
       body: Padding(
         padding: const EdgeInsets.all(20),
         child: Center(
@@ -102,13 +129,11 @@ class InfoTile extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 8),
       child: ListTile(
-          tileColor: Colors.green.shade100,
-          title: Text(title),
-          subtitle: Text(value ?? 'Loading...'),
-          shape: Border.all(color: Colors.green,),
-        ),
-      
-      
+        tileColor: Colors.green.shade100,
+        title: Text(title),
+        subtitle: Text(value ?? 'Loading...'),
+        shape: Border.all(color: Colors.green),
+      ),
     );
   }
 }
