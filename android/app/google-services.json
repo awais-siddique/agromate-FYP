@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "6181779788",
+    "project_id": "agromate-5604d",
+    "storage_bucket": "agromate-5604d.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:6181779788:android:c80f68c147a0c3cb92b7e9",
+        "android_client_info": {
+          "package_name": "com.android.application"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC-CkEn8aZOH5J_h_cCHVChphl4-8PYeZw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
