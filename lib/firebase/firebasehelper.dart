@@ -12,7 +12,7 @@ class Service {
           .createUserWithEmailAndPassword(email: email!, password: password!)
           .then((value) => {
                 Navigator.push(context,
-                    MaterialPageRoute(builder: (context) => DashboardScreen()))
+                    MaterialPageRoute(builder: (context) => const DashboardScreen()))
               });
     } catch (e) {
       errorBox(context, e);
@@ -26,7 +26,7 @@ class Service {
           .signInWithEmailAndPassword(email: email!, password: password!)
           .then((value) => {
                 Navigator.push(context,
-                    MaterialPageRoute(builder: (context) => DashboardScreen()))
+                    MaterialPageRoute(builder: (context) => const DashboardScreen()))
               });
     } catch (e) {
       errorBox(context, e);

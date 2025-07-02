@@ -13,7 +13,7 @@ import 'screens/splashscreen.dart';
 void main() async{
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(
-      options:FirebaseOptions(
+      options:const FirebaseOptions(
         apiKey: "AIzaSyC-CkEn8aZOH5J_h_cCHVChphl4-8PYeZw",
         appId: "1:6181779788:android:c80f68c147a0c3cb92b7e9",
         messagingSenderId: "6181779788",
@@ -35,7 +35,7 @@ void main() async{
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({Key? key}) : super(key: key);
+  const MyApp({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -54,7 +54,7 @@ class MyApp extends StatelessWidget {
         initialRoute: '/',
         routes: {
           '/': (context) => const SplashScreen(),
-          '/login': (context) =>  LoginScreen(),
+          '/login': (context) =>  const LoginScreen(),
           '/forgot-password': (context) => const ForgotPasswordScreen(),
           '/register':(context)=> const CreateAccountPage(),
           '/dashboard':(context)=> const DashboardScreen(),

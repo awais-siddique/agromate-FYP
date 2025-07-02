@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
@@ -7,6 +6,8 @@ import 'package:overlay_support/overlay_support.dart';
 import 'package:agromate/screens/notificationservice.dart'; // Make sure this exists
 
 class MoistureStatus extends StatefulWidget {
+  const MoistureStatus({super.key});
+
   @override
   _MoistureStatusState createState() => _MoistureStatusState();
 }
@@ -65,24 +66,55 @@ if(!mounted) return;
   }
 
   Future<void> fetchWeatherAndRecommend() async {
-    final url =
-        'https://api.openweathermap.org/data/2.5/weather?q=$city&appid=$apiKey';
+    final url = 'https://api.openweathermap.org/data/2.5/forecast?q=$city&appid=$apiKey';
 
     try {
       final response = await http.get(Uri.parse(url));
+
+      if (response.statusCode != 200) {
+        print('API Error: ${response.statusCode}');
+        return;
+      }
+
       final data = json.decode(response.body);
 
-      final hasRain = (data['weather'] as List)
-          .any((w) => w['main'].toString().toLowerCase().contains('rain'));
-if(!mounted) return;
+      // Debug output
+      print('Weather API response: $data');
+
+      if (data == null || data['list'] == null || data['list'] is! List) {
+        print('Forecast data is invalid or missing.');
+        return;
+      }
+
+      final forecastList = data['list'] as List;
+
+      final now = DateTime.now();
+      bool rainExpected = false;
+
+      for (var entry in forecastList) {
+        final forecastTime = DateTime.parse(entry['dt_txt']);
+        final diff = forecastTime.difference(now);
+
+        if (diff.inHours <= 72) {
+          final weatherList = entry['weather'] as List?;
+          if (weatherList != null && weatherList.any((w) => w['main'].toString().toLowerCase().contains('rain'))) {
+            rainExpected = true;
+            break;
+          }
+        }
+      }
+
+      if (!mounted) return;
       setState(() {
-        weatherCondition = hasRain ? 'Rain expected' : 'No rain';
-        recommendation = generateRecommendation(moistureStatus, hasRain);
+        weatherCondition = rainExpected ? 'Rain expected (next 3 days)' : 'No rain expected';
+        recommendation = generateRecommendation(moistureStatus, rainExpected);
       });
     } catch (e) {
       print('Weather API error: $e');
     }
   }
+
+
 
   String generateRecommendation(String? status, bool rainComing) {
     if (status == null) return 'No data';
@@ -96,7 +128,7 @@ if(!mounted) return;
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Soil Moisture Advisor'),
+        title: const Text('Soil Moisture Advisor'),
         centerTitle: true,
         backgroundColor: Colors.green,
       ),
@@ -122,7 +154,7 @@ class InfoTile extends StatelessWidget {
   final String title;
   final String? value;
 
-  const InfoTile({required this.title, this.value});
+  const InfoTile({super.key, required this.title, this.value});
 
   @override
   Widget build(BuildContext context) {

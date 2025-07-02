@@ -2,7 +2,7 @@ import 'package:agromate/firebase/firebasehelper.dart';
 import 'package:flutter/material.dart';
 
 class LoginScreen extends StatefulWidget {
-  LoginScreen({Key? key}) : super(key: key);
+  const LoginScreen({super.key});
 
   @override
   State<LoginScreen> createState() => _LoginScreenState();
@@ -171,10 +171,10 @@ class _LoginScreenState extends State<LoginScreen> {
                                                 AlwaysStoppedAnimation<Color>(
                                                     Colors.white),
                                           )
-                                        : Row(
+                                        : const Row(
                                             mainAxisAlignment:
                                                 MainAxisAlignment.center,
-                                            children: const [
+                                            children: [
                                               Icon(Icons.login,
                                                   color: Colors.white),
                                               SizedBox(width: 10),

@@ -3,7 +3,7 @@ import 'package:provider/provider.dart';
 import 'package:agromate/screens/notificationservice.dart';
 
 class NotificationsScreen extends StatelessWidget {
-  const NotificationsScreen({Key? key}) : super(key: key);
+  const NotificationsScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -71,14 +71,14 @@ class NotificationTile extends StatelessWidget {
   final ValueChanged<bool?> onChanged;
 
   const NotificationTile({
-    Key? key,
+    super.key,
     required this.icon,
     required this.message,
     required this.date,
     required this.time,
     required this.checked,
     required this.onChanged,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

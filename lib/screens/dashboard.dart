@@ -4,9 +4,8 @@ import 'package:agromate/screens/moisture.dart';
 import 'package:flutter/material.dart';
 import 'package:agromate/screens/notification.dart';
 import 'package:agromate/screens/settings.dart';
-import 'package:agromate/screens/recommendations.dart';
 class DashboardScreen extends StatefulWidget {
-  const DashboardScreen({Key? key}) : super(key: key);
+  const DashboardScreen({super.key});
 
   @override
   State<DashboardScreen> createState() => _DashboardScreenState();
@@ -16,7 +15,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
   int _currentIndex = 0;
 
   final List<Widget> _screens = [
-     DashboardContent(),
+     const DashboardContent(),
     const SettingsScreen(),
     const NotificationsScreen(),
   ];
@@ -66,7 +65,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
 
 // Dashboard Content Widget
 class DashboardContent extends StatefulWidget {
-  DashboardContent({Key? key}) : super(key: key);
+  const DashboardContent({super.key});
 
   @override
   _DashboardContentState createState() => _DashboardContentState();
@@ -94,7 +93,7 @@ class _DashboardContentState extends State<DashboardContent> {
   }
 
   void startImageSlider() {
-    Timer.periodic(Duration(seconds: 2), (Timer timer) {
+    Timer.periodic(const Duration(seconds: 2), (Timer timer) {
       if (_currentPage < wheatImages.length - 1) {
         _currentPage++;
       } else {
@@ -103,7 +102,7 @@ class _DashboardContentState extends State<DashboardContent> {
       if (_pageController.hasClients) {
         _pageController.animateToPage(
           _currentPage,
-          duration: Duration(milliseconds: 300),
+          duration: const Duration(milliseconds: 300),
           curve: Curves.easeInOut,
         );
       }
@@ -151,12 +150,12 @@ class _DashboardContentState extends State<DashboardContent> {
               itemCount: wheatImages.length,
               itemBuilder: (context, index) {
                 return Container(
-                  margin: EdgeInsets.symmetric(horizontal: 10),
+                  margin: const EdgeInsets.symmetric(horizontal: 10),
                   decoration: BoxDecoration(
                     color: Colors.green,
                     borderRadius: BorderRadius.circular(12),
                   ),
-                  padding: EdgeInsets.all(10),
+                  padding: const EdgeInsets.all(10),
                   child: ClipRRect(
                     borderRadius: BorderRadius.circular(12),
                     child: Image.asset(
@@ -184,7 +183,7 @@ class _DashboardContentState extends State<DashboardContent> {
                     const Text('Moisture'),
                     Text(
                       '${(moistureProgress * 100).toStringAsFixed(0)}%',
-                      style: TextStyle(fontWeight: FontWeight.bold),
+                      style: const TextStyle(fontWeight: FontWeight.bold),
                     ),
                   ],
                 ),
@@ -199,18 +198,18 @@ class _DashboardContentState extends State<DashboardContent> {
                   onPressed: () {
                     Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (context) => MoistureStatus()),
+                      MaterialPageRoute(builder: (context) => const MoistureStatus()),
                     );
                   },
-                  child: const Text(
-                    'View Full Status',
-                    style: TextStyle(color: Colors.black),
-                  ),
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Colors.green,
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(25),
                     ),
+                  ),
+                  child: const Text(
+                    'View Full Status',
+                    style: TextStyle(color: Colors.black),
                   ),
                 ),
               ],
@@ -223,38 +222,38 @@ class _DashboardContentState extends State<DashboardContent> {
           _buildCard(
             context,
             title: 'Harvest Smarter – Agromate Tips',
-            child: Column(
+            child: const Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                const ListTile(
+                ListTile(
                   leading: Icon(Icons.lightbulb_outline, color: Colors.green),
                   title: Text(
                     'Water early in the morning to reduce evaporation.',
                     style: TextStyle(fontSize: 14),
                   ),
                 ),
-                const ListTile(
+                ListTile(
                   leading: Icon(Icons.lightbulb_outline, color: Colors.green),
                   title: Text(
                     'Use compost to improve soil fertility and structure.',
                     style: TextStyle(fontSize: 14),
                   ),
                 ),
-                const ListTile(
+                ListTile(
                   leading: Icon(Icons.lightbulb_outline, color: Colors.green),
                   title: Text(
                     'Rotate crops yearly to maintain soil health and reduce pests.',
                     style: TextStyle(fontSize: 14),
                   ),
                 ),
-                const ListTile(
+                ListTile(
                   leading: Icon(Icons.lightbulb_outline, color: Colors.green),
                   title: Text(
                     'Use mulch to retain soil moisture and suppress weed growth.',
                     style: TextStyle(fontSize: 14),
                   ),
                 ),
-                const SizedBox(height: 10),
+                SizedBox(height: 10),
                 
               ],
             ),

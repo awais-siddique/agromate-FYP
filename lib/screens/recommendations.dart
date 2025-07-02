@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 class SoilMonitoringScreen extends StatelessWidget {
-  const SoilMonitoringScreen({Key? key}) : super(key: key);
+  const SoilMonitoringScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -26,15 +26,15 @@ class SoilMonitoringScreen extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             // Icon and title
-            Column(
+            const Column(
               children: [
                 Icon(
                   Icons.hail, // Replace with a relevant icon
                   size: 48,
                   color: Colors.brown,
                 ),
-                const SizedBox(height: 8),
-                const Text(
+                SizedBox(height: 8),
+                Text(
                   'Soil Health',
                   style: TextStyle(
                     fontSize: 20,
@@ -57,15 +57,15 @@ class SoilMonitoringScreen extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     // Moisture Header
-                    Row(
+                    const Row(
                       children: [
                         Icon(
                           Icons.water_drop,
                           color: Colors.blue,
                           size: 24,
                         ),
-                        const SizedBox(width: 8),
-                        const Text(
+                        SizedBox(width: 8),
+                        Text(
                           'Moisture:',
                           style: TextStyle(
                             fontSize: 16,

@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
 class ForgotPasswordScreen extends StatefulWidget {
-  const ForgotPasswordScreen({Key? key}) : super(key: key);
+  const ForgotPasswordScreen({super.key});
 
   @override
   State<ForgotPasswordScreen> createState() => _ForgotPasswordScreenState();
@@ -27,8 +27,8 @@ if(!mounted) return;
         setState(() => isLoading = false);
 
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: const Text("Password reset email sent! Check your inbox."),
+          const SnackBar(
+            content: Text("Password reset email sent! Check your inbox."),
             backgroundColor: Colors.green,
           ),
         );

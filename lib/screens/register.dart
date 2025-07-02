@@ -55,7 +55,7 @@ class _CreateAccountPageState extends State<CreateAccountPage> {
         leading: IconButton(
           icon: const Icon(Icons.arrow_back, color: Colors.black),
           onPressed: () {
-            Navigator.push(context, MaterialPageRoute(builder: (_) => LoginScreen()));
+            Navigator.push(context, MaterialPageRoute(builder: (_) => const LoginScreen()));
           },
         ),
       ),
